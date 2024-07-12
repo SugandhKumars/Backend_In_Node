@@ -61,9 +61,18 @@ app
 // add a new user
 app.post("/api/users", (req, res) => {
   let body = req.body;
+  if (
+    !body ||
+    !body.first_name ||
+    !body.last_name ||
+    !body.email ||
+    !body.gender
+  ) {
+    return res.status(401).json({ msg: "All fields are required..." });
+  }
   users.push({ ...body, id: users.length + 1 });
   fs.writeFile("./MOCK_DATA.json", JSON.stringify(users), (err, result) => {
-    return res.json({ status: "Added", id: users.length });
+    return res.status(201).json({ status: "Added", id: users.length });
   });
 });
 
